@@ -1,15 +1,28 @@
-# DataDeck Agent Kit - Product Requirements Document
+# ClawCrew - Product Requirements Document
 
-**Version:** 1.0  
-**Author:** Beast (via DataDeck)  
-**Date:** January 2025  
-**Status:** Draft
+**Version:** 2.0  
+**Author:** Gambit + Beast  
+**Date:** February 2026  
+**Status:** Vision Update - North Star Defined
+
+---
+
+## 🎯 What Changed in v2.0
+
+**v1.0 Vision:** CLI toolkit for service providers to deploy Moltbot instances for clients  
+**v2.0 Vision:** Consumer product - people deploy their own openclaw with agent library + personality customization
+
+**Key Shift:** From B2B2C (Dave deploys for clients) to B2C (users deploy for themselves)
+
+**Inspiration:** Products hitting $7K MRR in 3 days prove people will pay premium for "complex tech made simple." ClawCrew applies that to personal AI teams.
 
 ---
 
 ## Executive Summary
 
-The DataDeck Agent Kit is a CLI toolkit that reduces Moltbot setup time from 4-8 hours to under 2 hours. It provides guided configuration, pre-built persona templates, and validation tools that enable service providers to deploy personal AI assistants for non-technical users.
+ClawCrew is a consumer product that makes deploying your own AI team as easy as signing up for a SaaS. Choose from pre-built agent archetypes, customize their personalities, and deploy a full openclaw instance in under 30 minutes. No technical knowledge required.
+
+**North Star:** The $7K MRR in 3 days product model — people want AI power without complexity. ClawCrew delivers that for personal AI teams.
 
 ---
 
@@ -17,122 +30,255 @@ The DataDeck Agent Kit is a CLI toolkit that reduces Moltbot setup time from 4-8
 
 ### The User Story
 
-Sarah runs a small accounting practice. She's heard about AI assistants but finds the technology overwhelming. She doesn't want to learn prompt engineering or manage cloud infrastructure. She just wants help with:
+Sarah runs a small accounting practice. She's heard about AI assistants like ChatGPT, but they're generic and don't actually *know* her. She wants an AI that:
 
-- Managing her calendar and appointments
-- Following up on client emails she's forgotten
-- Getting a daily summary of what she needs to focus on
-- Reminding her about deadlines and upcoming tasks
+- Understands her business and remembers context
+- Has access to her calendar, email, and tools
+- Can act proactively, not just respond to prompts
+- Feels like a real assistant, not a chatbot
 
-Sarah represents the "common person" — technically capable enough to use a smartphone, but not interested in becoming a systems administrator.
+She's tried setting up opensource alternatives but hit walls:
+- Complex installation guides
+- Confusing configuration files
+- No guidance on what "personality" even means
+- Hours of trial and error
 
-### The Service Provider Problem
+**What Sarah wants:** Click a button, pick an assistant type, give it a personality, and have it working in 30 minutes.
 
-Dave (DataDeck) wants to deploy Moltbot for clients like Sarah. Currently, each deployment requires:
+### The Market Opportunity
 
-1. **Infrastructure provisioning** — VPS setup, security hardening, domain configuration
-2. **Moltbot installation** — Dependencies, auth flows, daemon setup
-3. **Channel configuration** — Telegram bots, API tokens, webhook setup
-4. **Agent customization** — SOUL.md, USER.md, AGENTS.md, personality tuning
-5. **Integration setup** — OAuth flows for Google, GitHub, Trello, etc.
-6. **Automation** — Cron jobs for briefings, heartbeats, monitoring
-7. **Memory systems** — Embedding config, search setup, compaction rules
-8. **Testing & validation** — End-to-end flow verification, edge case handling
-9. **User training** — Teaching basics, setting expectations
+AI assistant platforms are exploding, but they fall into two camps:
 
-**Current time: 4-8 hours per deployment**  
-**Target time: Under 2 hours per deployment**
+**Generic SaaS (ChatGPT, Claude, Gemini):**
+- ✅ Easy to use
+- ✅ No setup required
+- ❌ Zero customization
+- ❌ No memory between sessions
+- ❌ Can't access your tools
+- ❌ Feels like a product, not a person
+
+**Self-Hosted (Moltbot, openclaw, etc.):**
+- ✅ Fully customizable
+- ✅ Deep integration with your tools
+- ✅ True memory and personality
+- ❌ 4-8 hours to set up
+- ❌ Requires technical knowledge
+- ❌ Easy to misconfigure
+
+**ClawCrew bridges the gap:** Easy as SaaS, powerful as self-hosted.
 
 ### Why This Matters
 
-Every hour spent on setup is an hour not spent acquiring clients or improving the product. More importantly, the complexity creates errors — missed steps, misconfigured integrations, personality mismatches. Users like Sarah end up with assistants that don't feel quite right.
+The market has proven people will pay for "batteries included" AI tools. A product that hit **$7K MRR in 3 days** shows there's massive demand for simplicity without sacrificing power.
+
+ClawCrew democratizes personal AI teams. Not just for developers or companies — for everyone.
+
+### Key Insight: The $7K MRR Model
+
+**Observation:** A side project hitting $7K MRR in 3 days proves a critical market truth:
+
+**People will pay premium prices for tools that make complex technology instantly accessible.**
+
+The pattern repeats across successful products:
+- **Stripe** — Made payment processing trivial (vs. manual merchant accounts)
+- **Vercel** — Made deployment one-click (vs. manual server config)
+- **Superhuman** — Made email management delightful (vs. Gmail power-user gymnastics)
+
+**ClawCrew follows the same playbook for personal AI:**
+- ❌ 4-8 hours of configuration → ✅ 30-minute wizard
+- ❌ Reading documentation → ✅ Choosing from templates
+- ❌ Writing SOUL.md → ✅ Describing what you want in plain English
+- ❌ Debugging integrations → ✅ One-click OAuth flows
+
+**The willingness to pay exists.** The product just needs to deliver on the promise of simplicity.
 
 ---
 
 ## Solution Overview
 
-The DataDeck Agent Kit is a CLI toolkit with three core components:
+ClawCrew is a **web-based onboarding wizard** that deploys a fully configured openclaw instance in 3 steps:
 
-### 1. Setup Wizard (`moltbot-kit init`)
+### 1. Choose Your Crew (Agent Library)
 
-An interactive CLI that guides through configuration step-by-step. Collects user information, validates inputs, generates configuration files.
+Browse a catalog of pre-built agent archetypes:
+- **Personal Assistant** — Your second brain for life admin
+- **Business Manager** — Client follow-ups, invoicing, scheduling
+- **Family Coordinator** — Household planning and kid wrangling
+- **Developer Sidekick** — Code review, GitHub, documentation
+- **Research Partner** — Deep dives, summaries, learning
+- **Creative Collaborator** — Writing, brainstorming, ideation
 
-### 2. Persona Templates
+Each archetype comes with:
+- **Pre-configured personality** (voice, tone, behaviors)
+- **Recommended integrations** (Google, GitHub, Trello, etc.)
+- **Default automations** (morning briefings, reminders, monitoring)
+- **Sample interactions** (so you know what to expect)
 
-Pre-built personality configurations for common use cases:
-- **Family Manager** — Household coordination, kid schedules, meal planning
-- **Small Business Owner** — Client follow-ups, invoicing reminders, scheduling
-- **Personal Assistant** — Calendar, email triage, task management
-- **Developer** — Code review, GitHub integration, documentation
-- **Executive** — Meeting prep, stakeholder communication, strategic planning
+**Future:** Community marketplace where users can share custom agent types.
 
-### 3. Validation Suite (`moltbot-kit validate`)
+### 2. Make It Yours (Personality Customization)
 
-Pre-flight checks that verify everything works before handoff:
-- Channel connectivity
-- Integration auth
-- Cron job execution
-- Memory system function
-- End-to-end message flow
+Give your agent a unique personality:
+- **Name** — "Jarvis", "Samantha", "Alex", or something personal
+- **Voice** — Formal/casual, chatty/brief, playful/serious
+- **Emoji style** — Liberal, occasional, never
+- **Quirks** — Cajun flair, dry humor, optimistic encourager, etc.
+- **Preview** — See sample messages in different styles
+
+**The magic:** You're not writing config files. You're having a conversation about what you want, and ClawCrew translates that into SOUL.md, USER.md, and AGENTS.md automatically.
+
+### 3. Deploy & Connect (One-Click Setup)
+
+ClawCrew handles everything:
+- **Infrastructure provisioning** — Spin up a VPS or use your own
+- **openclaw installation** — Latest stable version, pre-configured
+- **Channel setup** — Connect Telegram (or Signal, WhatsApp, etc.)
+- **Integration OAuth** — One-click flows for Google, GitHub, Trello
+- **First conversation** — Test message to confirm it's working
+
+**Time from start to "Hello!":** Under 30 minutes.
+
+**Hosting options:**
+- **ClawCrew-hosted** (easiest, $XX/month)
+- **Your own VPS** (bring your own server, pay only for the tool)
+- **Local** (advanced users, run on your own hardware)
+
+---
+
+## The Agent Library
+
+The heart of ClawCrew is the **Agent Library** — a curated collection of pre-built agent types that people can deploy instantly.
+
+### What Makes a Good Agent Archetype?
+
+Each agent type in the library should:
+
+1. **Solve a clear use case** — Not "general AI", but "helps small business owners stay on top of clients"
+2. **Have a distinct personality** — Not generic chatbot voice, but a character people can connect with
+3. **Come with integrations** — Pre-configured connections to relevant tools
+4. **Be immediately useful** — Working automations from day one
+
+### Agent Library v1.0
+
+#### Personal Assistant
+**Tagline:** "Your second brain"  
+**Use case:** Life admin, calendar, email triage, reminders  
+**Personality:** Adaptive (matches your energy), helpful without being performative  
+**Integrations:** Google Workspace, Trello/Todoist  
+**Automations:** Morning overview, evening reflection  
+
+#### Business Manager  
+**Tagline:** "Your operations partner"  
+**Use case:** Client follow-ups, invoicing, meeting prep  
+**Personality:** Professional but friendly, action-oriented  
+**Integrations:** Google Workspace, Trello, Calendly  
+**Automations:** Business day briefing, client follow-up reminders  
+
+#### Family Coordinator
+**Tagline:** "Keeping the household running"  
+**Use case:** Family calendar, kid activities, meal planning, events  
+**Personality:** Warm, supportive, gently proactive  
+**Integrations:** Shared Google Calendar, Trello (family board)  
+**Automations:** Daily family overview, weekly event summary  
+
+#### Developer Sidekick
+**Tagline:** "Your technical co-pilot"  
+**Use case:** Code review, GitHub notifications, documentation, debugging  
+**Personality:** Direct, technical, efficient  
+**Integrations:** GitHub, Linear/Jira (optional)  
+**Automations:** GitHub notification summary, open PR/issue reviews  
+
+#### Research Partner
+**Tagline:** "Deep dives on demand"  
+**Use case:** Research topics, summarize articles, learning assistance  
+**Personality:** Curious, thorough, clear explainer  
+**Integrations:** Web search, YouTube, Drive (for notes)  
+**Automations:** Weekly learning summary, topic deep-dives  
+
+#### Creative Collaborator
+**Tagline:** "Your brainstorming buddy"  
+**Use case:** Writing assistance, ideation, creative feedback  
+**Personality:** Encouraging, playful, idea-generator  
+**Integrations:** Drive (for drafts), web search (for inspiration)  
+**Automations:** Weekly creative prompts, idea capture  
+
+### Agent Library v2.0 (Future)
+
+- **Fitness Coach** — Workout tracking, nutrition, motivation
+- **Finance Tracker** — Budget monitoring, expense categorization
+- **Learning Tutor** — Personalized study plans, quiz generation
+- **Travel Planner** — Itinerary building, booking reminders
+- **Community Marketplace** — User-created agent types
+
+### Why This Matters
+
+**People don't want to configure SOUL.md files. They want to say "I need help running my business" and get a working solution.**
+
+The agent library lets users start with proven templates, then customize from there. It's the difference between:
+- ❌ "Here's a blank canvas, good luck"
+- ✅ "Here are 6 starting points, pick one and make it yours"
 
 ---
 
 ## Detailed Requirements
 
-### CLI Tool: `moltbot-kit`
+### Onboarding Wizard (Web App)
 
-#### Commands
+#### User Flow
 
-```
-moltbot-kit init              # Interactive setup wizard
-moltbot-kit validate          # Run all validation checks
-moltbot-kit template <name>   # Apply a persona template
-moltbot-kit integrate <name>  # Configure a specific integration
-moltbot-kit export            # Export configuration for backup/transfer
-moltbot-kit status            # Show current configuration status
-```
+**Step 1: Welcome & Intro (30 seconds)**
+- Explain what ClawCrew does in simple terms
+- Show a 30-second demo video of agent interaction
+- "Ready to build your crew? Let's go."
 
-#### `init` Command Flow
+**Step 2: Choose Your Agent (2 minutes)**
+- Browse the agent library (cards with descriptions)
+- See sample conversations for each type
+- Select one to start (can add more later)
+- Option to "start from scratch" (advanced users)
 
-```
-Step 1: User Profile Collection
-├── Name (first name, what to call them)
-├── Timezone
-├── Communication preferences (formal/casual, chatty/brief)
-├── Primary use case (multi-select from personas)
-└── Key dates (birthday, anniversaries — optional)
+**Step 3: Customize Personality (3 minutes)**
+- **Name:** What should we call your agent?
+- **Voice:** Interactive slider (formal ↔ casual, brief ↔ detailed)
+- **Style:** Pick from personality presets or describe in your own words
+- **Preview:** See how the agent would respond to sample messages
+- Auto-generates SOUL.md in the background
 
-Step 2: Channel Selection
-├── Primary channel (Telegram recommended)
-├── Channel-specific setup (bot token, user ID, etc.)
-└── Backup channel (optional)
+**Step 4: Tell Us About You (2 minutes)**
+- **Name:** What should the agent call you?
+- **Timezone:** Auto-detect with manual override
+- **Context:** "In 2-3 sentences, what do you want this agent to help with?"
+- Auto-generates USER.md
 
-Step 3: Persona Selection
-├── Browse available personas
-├── Select primary persona
-├── Customize name/emoji for agent
-└── Preview generated SOUL.md
+**Step 5: Connect Your Tools (5-10 minutes)**
+- Show recommended integrations for the chosen agent type
+- One-click OAuth flows (Google, GitHub, Trello, etc.)
+- Option to skip and add later
+- Each integration tested immediately after connection
 
-Step 4: Integration Selection
-├── Show available integrations
-├── Select which to configure
-├── For each: run OAuth flow or collect credentials
-└── Test each integration
+**Step 6: Set Up Automations (2 minutes)**
+- Default automations for the agent type are pre-checked
+- Morning briefing time picker (default 8 AM in user's timezone)
+- Evening wrap-up toggle
+- Heartbeat monitoring toggle
+- Advanced users can add custom cron jobs
 
-Step 5: Automation Setup
-├── Enable morning briefing? (Y/n)
-├── Briefing time preference
-├── Enable evening wrap-up? (Y/n)
-├── Enable background monitoring? (Y/n)
-└── Custom cron expressions (advanced)
+**Step 7: Deploy (5-10 minutes)**
+- Choose hosting:
+  - ClawCrew-hosted (instant, managed)
+  - Your own VPS (enter SSH details)
+  - Local (download installer)
+- Infrastructure provisioning happens in background
+- Progress bar with status updates
+- First test message sent automatically
 
-Step 6: Review & Generate
-├── Show configuration summary
-├── Confirm or go back
-├── Generate all configuration files
-├── Run initial validation
-└── Show next steps
-```
+**Step 8: You're Live! (1 minute)**
+- "Say hello to [Agent Name]!"
+- Quick tutorial on how to interact
+- Link to help docs and community
+- "What would you like to do first?" prompt
+
+**Total time:** 20-30 minutes for typical setup
 
 #### Configuration Files Generated
 
@@ -576,30 +722,160 @@ The following are explicitly **not** part of v1.0:
 
 ## Success Metrics
 
-### Primary Metric
+### North Star Metric
 
-**Deployment time:** Average time from "start init" to "validation passes"
+**Weekly Active Users (WAU):** Number of users who have at least one conversation with their agent each week.
 
-- **Current baseline:** 4-8 hours
-- **Target:** Under 2 hours
-- **Stretch:** Under 1 hour
+- **Target:** 80%+ retention at 4 weeks
+- **Indicator of:** Product delivering real value, not just initial curiosity
 
-### Secondary Metrics
+### Primary Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Setup completion rate | >90% | % of init starts that complete validation |
-| First-week retention | >80% | % of deployed users still active after 7 days |
-| Support tickets per deployment | <2 | Average tickets created within first week |
-| Persona template usage | >60% | % of deployments using a template vs. custom |
-| Integration success rate | >95% | % of integration setups that pass validation |
+| Metric | Target | Why It Matters |
+|--------|--------|----------------|
+| **Setup completion rate** | >85% | Users who start onboarding finish it |
+| **Time to first message** | <30 min | Speed = delight + lower drop-off |
+| **Agent template usage** | >70% | Validates the library approach |
+| **Integration adoption** | Avg 2-3 per user | More integrations = stickier users |
+| **30-day retention** | >75% | Product is useful long-term, not novelty |
+| **NPS (Net Promoter Score)** | >50 | Users would recommend to friends |
+
+### Revenue Metrics (SaaS Model)
+
+| Metric | Target | Notes |
+|--------|--------|-------|
+| **MRR growth** | 20%+ monthly | Following the $7K MRR benchmark |
+| **CAC (Customer Acquisition Cost)** | <$50 | Organic + word-of-mouth focused |
+| **LTV (Lifetime Value)** | >$500 | Annual retention target: 70%+ |
+| **Free-to-paid conversion** | >10% | For freemium model (if offered) |
 
 ### Qualitative Indicators
 
-- Service provider (Dave) can demo a full deployment in a sales call
-- Non-technical users describe their assistant as "actually helpful"
-- Users anthropomorphize their agent (a sign of successful personality)
-- Agent proactively surfaces useful information without prompting
+**Evidence the product is working:**
+- Users name their agents (anthropomorphization)
+- Users share screenshots of helpful interactions
+- Support requests are feature asks, not bug reports
+- Community forum has active "show & tell" threads
+- Users create and share custom agent templates
+
+**Evidence of product-market fit:**
+- Organic signups exceed paid acquisition
+- Users describe the product as "can't live without it"
+- Inbound partnership/integration requests
+- Media coverage without outreach
+
+---
+
+## Business Model
+
+### Pricing Tiers
+
+**Free Tier (Limited)**
+- 1 agent
+- Basic integrations (Google, Telegram)
+- Community support only
+- ClawCrew-hosted with usage limits (100 messages/day)
+- **Goal:** Let people try before committing
+
+**Pro Tier ($20-30/month)**
+- Up to 3 agents
+- All integrations
+- Priority support
+- ClawCrew-hosted (unlimited messages)
+- Custom automations
+- **Goal:** Individual power users, small teams
+
+**Team Tier ($50-100/month)**
+- Unlimited agents
+- Shared agents (multi-user access)
+- Advanced integrations (Slack, custom webhooks)
+- Premium support
+- Option for dedicated infrastructure
+- **Goal:** Small businesses, family accounts
+
+**Enterprise (Custom)**
+- White-label option
+- Self-hosted with managed support
+- Custom integrations
+- SLA guarantees
+- **Goal:** Companies deploying AI assistants at scale
+
+### Alternative: "Bring Your Own Infrastructure"
+
+**Pay-per-seat model ($10/month per agent):**
+- User provides their own VPS or runs locally
+- ClawCrew wizard + ongoing updates
+- Community support
+- **Goal:** Technical users who want control + cost savings
+
+### Revenue Projections (Optimistic)
+
+**Month 1-3 (Beta):**
+- 100 free users
+- 20 paying ($25 avg) = $500 MRR
+
+**Month 4-6 (Public Launch):**
+- 500 free users
+- 150 paying ($25 avg) = $3,750 MRR
+
+**Month 7-12 (Growth):**
+- 2,000 free users
+- 500 paying ($30 avg) = $15,000 MRR
+
+**Year 2 Target:**
+- $100K MRR (following $7K in 3 days benchmark trajectory)
+
+---
+
+## Go-to-Market Strategy
+
+### Launch Plan
+
+**Phase 1: Private Beta (Month 1-2)**
+- Invite-only access
+- Target: 50-100 early adopters
+- Focus: Product feedback, bug squashing
+- Channels: Twitter, Hacker News, Product Hunt teaser
+
+**Phase 2: Public Beta (Month 3-4)**
+- Open signups with waitlist
+- Target: 500 users
+- Focus: Stability, onboarding polish
+- Channels: Product Hunt launch, demo videos, word-of-mouth
+
+**Phase 3: v1.0 Launch (Month 5-6)**
+- Full public release
+- Target: 2,000+ users
+- Focus: Marketing, community building
+- Channels: Content marketing, partnerships, paid ads (if needed)
+
+### Marketing Channels
+
+**Organic (Primary):**
+- Twitter/X — Demo videos, use cases, success stories
+- YouTube — Setup tutorials, "day in the life" content
+- Blog — SEO-optimized guides ("How to build a personal AI assistant")
+- Community — Discord/forum for users to share tips
+
+**Partnerships:**
+- Integration partners (Google, Notion, Linear, etc.)
+- Influencers in productivity/AI space
+- Developer advocates
+
+**Paid (Secondary):**
+- Google/Facebook ads targeting "AI assistant" keywords
+- Sponsored content on tech blogs
+- Podcast sponsorships (productivity/tech shows)
+
+### Key Messages
+
+**Headline:** "Your AI team, deployed in 30 minutes"
+
+**Value props:**
+- **Easy as SaaS** — No technical knowledge required
+- **Powerful as self-hosted** — Full control, deep integrations
+- **Yours forever** — Not locked into a platform, export anytime
+- **Privacy-first** — Your data, your infrastructure (optional)
 
 ---
 
@@ -607,10 +883,27 @@ The following are explicitly **not** part of v1.0:
 
 ### Technology Choices
 
-- **Language:** TypeScript (consistency with Moltbot)
-- **CLI framework:** Commander.js or Inquirer.js for prompts
-- **Packaging:** npm package, installable via `npm install -g @datadeck/agent-kit`
-- **Dependencies:** Should work on macOS, Linux, and WSL (Windows Subsystem for Linux)
+**Frontend (Web App):**
+- **Framework:** Next.js (React) or SvelteKit
+- **Styling:** Tailwind CSS for rapid UI development
+- **Hosting:** Vercel or similar edge platform
+- **Auth:** Clerk or Auth0 for user accounts
+
+**Backend (API + Orchestration):**
+- **Language:** TypeScript/Node.js (consistency with Moltbot/openclaw)
+- **API:** REST or tRPC for type-safe client-server communication
+- **Infrastructure provisioning:** Terraform or Pulumi for VPS deployment
+- **Queue:** Bull or BullMQ for background job processing (deployments, validations)
+
+**Database:**
+- **User data:** PostgreSQL (Supabase or Railway)
+- **Agent configs:** Store generated SOUL.md, USER.md, etc. as files in user workspace
+- **Caching:** Redis for session state, deployment status
+
+**Deployment Automation:**
+- **VPS providers:** DigitalOcean, Linode, Hetzner (user choice)
+- **Deployment:** Ansible playbooks or custom scripts
+- **Monitoring:** Built-in health checks, user dashboard for agent status
 
 ### File Locations
 
