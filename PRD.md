@@ -3,7 +3,8 @@
 **Version:** 2.0  
 **Author:** Gambit + Beast  
 **Date:** February 2026  
-**Status:** Vision Update - North Star Defined
+**Status:** Vision Update - North Star Defined  
+**See Also:** [COMPETITIVE.md](./COMPETITIVE.md) — Competitive landscape (Bits, etc.)
 
 ---
 
