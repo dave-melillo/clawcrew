@@ -61,7 +61,7 @@ async function templateCommand(name, options) {
     console.log('\n' + chalk.yellow('Next steps:'));
     console.log(chalk.gray('  1. Edit USER.md with your information'));
     console.log(chalk.gray('  2. Customize SOUL.md if needed'));
-    console.log(chalk.gray('  3. Run: moltbot-kit validate'));
+    console.log(chalk.gray('  3. Run: clawcrew validate'));
     
   } catch (error) {
     spinner.fail(chalk.red('Failed to apply template'));
@@ -81,8 +81,8 @@ async function listTemplates() {
     console.log(chalk.dim(`    ID: ${persona.id}\n`));
   }
   
-  console.log(chalk.gray('Usage: moltbot-kit template <id>'));
-  console.log(chalk.gray('   or: moltbot-kit template (for interactive selection)\n'));
+  console.log(chalk.gray('Usage: clawcrew template <id>'));
+  console.log(chalk.gray('   or: clawcrew template (for interactive selection)\n'));
 }
 
 module.exports = templateCommand;

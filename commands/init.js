@@ -9,7 +9,7 @@ const { getPersonas, applyPersona, applyBaseTemplates, applyCustomizations } = r
 async function initCommand(options) {
   const workspace = options.workspace;
   
-  console.log(chalk.cyan.bold('\n🃏 DataDeck Agent Kit Setup\n'));
+  console.log(chalk.cyan.bold('\n🐺 ClawCrew Agent Setup\n'));
   console.log(chalk.gray('This wizard will guide you through setting up your personal AI assistant.\n'));
   
   // Check for existing state
@@ -70,7 +70,7 @@ async function initCommand(options) {
     
     console.log(chalk.yellow('Next steps:'));
     console.log(chalk.gray('  1. Review the generated files in ' + workspace));
-    console.log(chalk.gray('  2. Run: moltbot-kit validate'));
+    console.log(chalk.gray('  2. Run: clawcrew validate'));
     console.log(chalk.gray('  3. Start Moltbot in this workspace'));
     console.log(chalk.gray('  4. Send a test message to your agent\n'));
     

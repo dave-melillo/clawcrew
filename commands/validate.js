@@ -6,8 +6,8 @@ const ora = require('ora');
 async function validateCommand(options) {
   const workspace = options.workspace;
   
-  console.log(chalk.cyan.bold('\nDataDeck Agent Kit Validation'));
-  console.log(chalk.cyan('=============================\n'));
+  console.log(chalk.cyan.bold('\nClawCrew Configuration Validation'));
+  console.log(chalk.cyan('==================================\n'));
   
   let allPassed = true;
   const results = [];
@@ -73,8 +73,8 @@ async function validateCommand(options) {
     console.log(chalk.gray('\nYour agent configuration is valid!'));
     console.log(chalk.gray('\nNext steps:'));
     console.log(chalk.gray('  1. Review and customize USER.md'));
-    console.log(chalk.gray('  2. Start Moltbot in this workspace'));
-    console.log(chalk.gray('  3. Send a test message to your agent\n'));
+    console.log(chalk.gray('  2. Start your agent crew'));
+    console.log(chalk.gray('  3. Send a test message to your crew\n'));
   } else {
     console.log(chalk.red.bold('Status: ISSUES FOUND'));
     console.log(chalk.gray('\nPlease fix the issues above and run validate again.\n'));

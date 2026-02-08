@@ -42,7 +42,7 @@ program.parse(process.argv);
 
 // Show help if no command provided
 if (!process.argv.slice(2).length) {
-  console.log(chalk.cyan.bold('\n🃏 DataDeck Agent Kit\n'));
+  console.log(chalk.cyan.bold('\n🐺 ClawCrew - Build Your AI Agent Team\n'));
   program.outputHelp();
   console.log('\n' + chalk.gray('Examples:'));
   console.log(chalk.gray('  $ clawcrew init              # Start interactive setup'));
