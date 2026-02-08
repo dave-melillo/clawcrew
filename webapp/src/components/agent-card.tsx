@@ -68,7 +68,7 @@ export function AgentCard({
       
       <CardContent>
         <p className="text-sm text-muted-foreground line-clamp-3">
-          {data.description || (isAgent && agent.soulMd.substring(0, 150) + '...')}
+          {isTemplate && template?.description ? template.description : (isAgent && agent.soulMd.substring(0, 150) + '...')}
         </p>
         
         <div className="mt-4 flex flex-wrap gap-2">

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Agent, Channel, Schedule, Activity } from '@/types';
 import { agentTemplates } from '@/data/agent-templates';
 
@@ -7,21 +8,21 @@ interface CrewState {
   channels: Channel[];
   schedules: Schedule[];
   activities: Activity[];
-  
+
   // Agent actions
   addAgent: (template: string) => void;
   updateAgent: (id: string, updates: Partial<Agent>) => void;
   deleteAgent: (id: string) => void;
   toggleAgent: (id: string) => void;
-  
+
   // Channel actions
   addChannel: (channel: Omit<Channel, 'id' | 'createdAt'>) => void;
   updateChannel: (id: string, updates: Partial<Channel>) => void;
   deleteChannel: (id: string) => void;
-  
+
   // Activity actions
   addActivity: (activity: Omit<Activity, 'id' | 'timestamp'>) => void;
-  
+
   // Export/Import
   exportConfig: () => string;
   importConfig: (config: string) => void;
@@ -29,7 +30,7 @@ interface CrewState {
 
 const generateId = () => Math.random().toString(36).substring(2, 11);
 
-export const useCrewStore = create<CrewState>((set, get) => ({
+export const useCrewStore = create<CrewState>()(persist((set, get) => ({
   agents: [],
   channels: [],
   schedules: [],
@@ -160,4 +161,11 @@ export const useCrewStore = create<CrewState>((set, get) => ({
       console.error('Failed to import config:', error);
     }
   },
+}), {
+  name: 'clawcrew-store',
+  partialize: (state) => ({
+    agents: state.agents,
+    channels: state.channels,
+    schedules: state.schedules,
+  }),
 }));
