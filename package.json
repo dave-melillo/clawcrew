@@ -1,23 +1,35 @@
 {
   "name": "clawcrew",
-  "version": "1.0.0",
-  "description": "ClawCrew - CLI toolkit for Moltbot agent setup",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "ClawCrew - OpenClaw with personality. Multi-agent crew orchestration.",
+  "main": "lib/crew-engine.ts",
   "bin": {
-    "clawcrew": "./bin/clawcrew.js"
+    "clawcrew": "./bin/clawcrew"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cli": "node bin/clawcrew",
+    "dashboard": "cd skills/mission-control && npm run dev",
+    "webapp": "cd webapp && npm run dev",
+    "build:webapp": "cd webapp && npm run build",
+    "test": "echo \"Tests coming soon\" && exit 0"
   },
   "keywords": [
-    "moltbot",
+    "openclaw",
+    "clawcrew",
     "agent",
     "ai",
     "assistant",
-    "cli"
+    "cli",
+    "multi-agent",
+    "crew",
+    "orchestration"
   ],
-  "author": "DataDeck",
+  "author": "ClawCrew",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dave-melillo/clawcrew"
+  },
   "dependencies": {
     "commander": "^12.0.0",
     "inquirer": "^9.2.0",

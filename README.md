@@ -1,56 +1,141 @@
-# ClawCrew 🦞
+# ClawCrew 🃏
 
-**OpenClaw with personality.** A ready-to-run AI agent wrapper with pre-configured personas, skills, and workflows.
+**OpenClaw with personality.** Multi-agent crew orchestration made simple.
 
-## What You Get
+> "Bits gets you one OpenClaw. ClawCrew gets you a team."
 
-- **Gambit** 🃏 - Lead agent. Cajun card shark. Gets things done.
-- **Pre-configured skills** - X research, mission control, marketing copy
-- **One config file** - All your API keys in one place
-- **Memory that works** - Structured daily notes, searchable
-- **Mission control dashboard** - See what your agents are doing
+## What is ClawCrew?
+
+ClawCrew is a wrapper around [OpenClaw](https://openclaw.ai) that adds:
+- **Pre-built agent crews** - X-Men, Startup, Content, and more
+- **Personality system** - Agents with character, not just capabilities
+- **Crew orchestration** - Agents that talk to each other
+- **Mission Control** - Visual dashboard for your agent team
+- **One-command setup** - From zero to working crew in minutes
 
 ## Quick Start
 
 ```bash
-# Clone
+# Clone the repo
 git clone https://github.com/dave-melillo/clawcrew.git
 cd clawcrew
 
-# Configure (edit with your keys)
-cp config.example.env config.env
-nano config.env
+# Run the setup wizard
+./bin/clawcrew init
 
-# Install
-./install.sh
+# Check your crew
+./bin/clawcrew status
 
-# Run
-openclaw
+# Open the dashboard
+./bin/clawcrew dashboard
 ```
 
-## Requirements
+## The Crews
 
-- [OpenClaw](https://openclaw.ai) installed
-- Node.js 18+
-- API keys: Anthropic, X (optional), Vercel (optional)
+### 🃏 X-Men Crew
+The original. Based on real production usage.
+- **Gambit** 🃏 - Coordinator. Routes tasks, manages flow.
+- **Beast** 🔬 - Researcher. Writes PRDs, analyzes problems.
+- **Wolverine** 🐺 - Engineer. Builds features, ships code.
+- **Magneto** 🧲 - QA. Validates work, maintains quality.
 
-## What's Included
+### 🚀 Startup Crew
+Perfect for early-stage projects.
+- **The Boss** 🎯 - Coordination
+- **The Builder** ⚙️ - Engineering
+- **The Brain** 🔍 - Research
+- **The Artist** 🎨 - Creative
+
+### 📝 Content Crew
+For content-heavy workflows.
+- **Coordinator** - Routes work
+- **Writer** - Creates content
+- **Researcher** - Finds facts
+- **Creative** - Visual design
+
+### 👤 Solo Crew
+Just you and Gambit.
+
+## Project Structure
 
 ```
 clawcrew/
-├── personas/           # Agent personalities
-│   └── gambit.md       # The Cajun
-├── skills/             # Bundled capabilities
-│   ├── x-research/     # Twitter/X research
-│   └── mission-control/# Dashboard
-├── templates/          # Workflow templates
-│   ├── build.md        # Build something
-│   ├── research.md     # Research a topic
-│   └── ship.md         # Deploy to production
-├── config.example.env  # API key template
-└── install.sh          # One-command setup
+├── bin/clawcrew         # CLI entry point
+├── lib/crew-engine.ts   # Orchestration core
+├── personas/            # Agent personalities
+├── skills/
+│   ├── mission-control/ # Dashboard (Next.js)
+│   └── x-research/      # Twitter/X research
+├── templates/           # Workflow templates
+├── webapp/              # Full web app (Next.js)
+└── PRD.md               # Product spec
 ```
+
+## Components
+
+### CLI (`bin/clawcrew`)
+Interactive setup wizard. Run `clawcrew init` to configure your crew.
+
+### CrewEngine (`lib/crew-engine.ts`)
+The orchestration core. Handles:
+- Agent registry
+- Message routing between agents
+- Task delegation
+- Crew templates
+
+### Mission Control (`skills/mission-control/`)
+Visual dashboard showing:
+- Active tasks
+- Agent status
+- Backlog
+- Completed work
+
+### Web App (`webapp/`)
+Full configuration UI with:
+- Agent templates
+- SOUL.md editor
+- Channel configuration
+- Export/import
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+cd webapp && npm install
+cd ../skills/mission-control && npm install
+
+# Run CLI
+npm run cli
+
+# Run dashboard
+npm run dashboard
+
+# Run full webapp
+npm run webapp
+```
+
+## Configuration
+
+All config stored in `~/.clawcrew/`:
+- `config.json` - API keys, settings
+- `crew.json` - Your agent crew
+
+## Roadmap
+
+- [x] CLI wizard
+- [x] Crew templates (X-Men, Startup, Solo)
+- [x] Mission Control dashboard
+- [x] CrewEngine orchestration core
+- [ ] Agent-to-agent messaging
+- [ ] Real OpenClaw integration
+- [ ] Danger Room visualization
+- [ ] Cloud sync
 
 ## License
 
 MIT
+
+---
+
+*Laissez les bons temps rouler.* 🃏
