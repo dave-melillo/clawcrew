@@ -57,8 +57,19 @@ ENVEOF
 if [ -d "skills/mission-control" ]; then
     echo "🎯 Setting up Mission Control..."
     cd skills/mission-control
-    npm install --silent
+    npm install --silent 2>/dev/null || npm install
     cd ../..
+fi
+
+# Copy skills to workspace
+echo "📦 Copying skills to workspace..."
+cp -r skills/* "$WORKSPACE/skills/" 2>/dev/null || true
+
+# Install mission control in workspace too
+if [ -d "$WORKSPACE/skills/mission-control" ]; then
+    cd "$WORKSPACE/skills/mission-control"
+    npm install --silent 2>/dev/null || true
+    cd - > /dev/null
 fi
 
 echo ""

@@ -2,16 +2,9 @@
 
 /**
  * ClawCrew CLI - OpenClaw with personality
- * 
- * Commands:
- *   init              Initialize a new crew
- *   crew              Manage your crew
- *   status            Show crew status
- *   dashboard         Open mission control dashboard
- *   deploy            Deploy your crew
  */
 
-const { execSync, spawn } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
@@ -21,7 +14,7 @@ const CONFIG_PATH = path.join(CLAWCREW_DIR, 'config.json');
 const CREW_PATH = path.join(CLAWCREW_DIR, 'crew.json');
 
 // Colors
-const colors = {
+const c = {
   reset: '\x1b[0m',
   bright: '\x1b[1m',
   dim: '\x1b[2m',
@@ -34,11 +27,11 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
-  success: (msg) => console.log(`${colors.green}✓${colors.reset} ${msg}`),
-  warn: (msg) => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
-  error: (msg) => console.log(`${colors.red}✗${colors.reset} ${msg}`),
-  gambit: (msg) => console.log(`${colors.magenta}🃏${colors.reset} ${msg}`),
+  info: (msg) => console.log(`${c.blue}ℹ${c.reset} ${msg}`),
+  success: (msg) => console.log(`${c.green}✓${c.reset} ${msg}`),
+  warn: (msg) => console.log(`${c.yellow}⚠${c.reset} ${msg}`),
+  error: (msg) => console.log(`${c.red}✗${c.reset} ${msg}`),
+  gambit: (msg) => console.log(`${c.magenta}🃏${c.reset} ${msg}`),
 };
 
 // Crew templates
@@ -55,7 +48,7 @@ const crewTemplates = {
   },
   'startup': {
     name: 'Startup Crew',
-    description: 'Perfect for early-stage: Coordinator + Engineer + Researcher + Creative',
+    description: 'Coordinator + Engineer + Researcher + Creative',
     agents: [
       { id: 'coordinator', name: 'The Boss', emoji: '🎯', role: 'coordinator' },
       { id: 'engineer', name: 'The Builder', emoji: '⚙️', role: 'engineer' },
@@ -102,16 +95,24 @@ function saveCrew(crew) {
   fs.writeFileSync(CREW_PATH, JSON.stringify(crew, null, 2));
 }
 
-async function prompt(question) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
+// Simple sync prompt
+function prompt(question) {
   return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: process.stdin.isTTY,
+    });
+    
     rl.question(question, (answer) => {
       rl.close();
-      resolve(answer.trim());
+      resolve(answer ? answer.trim() : '');
     });
+    
+    // Handle non-TTY (piped input)
+    if (!process.stdin.isTTY) {
+      rl.once('close', () => resolve(''));
+    }
   });
 }
 
@@ -119,51 +120,76 @@ async function prompt(question) {
 
 async function init() {
   console.log(`
-${colors.bright}${colors.magenta}
+${c.bright}${c.magenta}
    ██████╗██╗      █████╗ ██╗    ██╗ ██████╗██████╗ ███████╗██╗    ██╗
   ██╔════╝██║     ██╔══██╗██║    ██║██╔════╝██╔══██╗██╔════╝██║    ██║
   ██║     ██║     ███████║██║ █╗ ██║██║     ██████╔╝█████╗  ██║ █╗ ██║
   ██║     ██║     ██╔══██║██║███╗██║██║     ██╔══██╗██╔══╝  ██║███╗██║
   ╚██████╗███████╗██║  ██║╚███╔███╔╝╚██████╗██║  ██║███████╗╚███╔███╔╝
    ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝  ╚═════╝╚═╝  ╚═╝╚══════╝ ╚══╝╚══╝
-${colors.reset}
-  ${colors.dim}OpenClaw with personality${colors.reset}
+${c.reset}
+  ${c.dim}OpenClaw with personality${c.reset}
   `);
 
   log.gambit("Bonjour, mon ami! Let's set up your crew.");
   console.log('');
 
-  // Check if already initialized
+  // Check TTY
+  if (!process.stdin.isTTY) {
+    log.warn('Non-interactive mode detected. Using defaults (X-Men crew).');
+    const template = crewTemplates['xmen'];
+    
+    const config = {
+      template: 'xmen',
+      apiKey: null,
+      createdAt: new Date().toISOString(),
+    };
+    saveConfig(config);
+    
+    const crew = {
+      id: 'xmen',
+      name: template.name,
+      agents: template.agents,
+      coordinatorId: template.agents[0].id,
+      createdAt: new Date().toISOString(),
+    };
+    saveCrew(crew);
+    
+    log.success('ClawCrew initialized with X-Men crew!');
+    log.info(`Config: ${CONFIG_PATH}`);
+    log.gambit("Run 'clawcrew status' to see your crew.");
+    return;
+  }
+
+  // Interactive mode
   const existing = loadConfig();
   if (existing) {
-    const overwrite = await prompt(`${colors.yellow}Existing config found. Overwrite? (y/N): ${colors.reset}`);
+    const overwrite = await prompt(`${c.yellow}Existing config found. Overwrite? (y/N): ${c.reset}`);
     if (overwrite.toLowerCase() !== 'y') {
       log.info('Keeping existing config.');
       return;
     }
   }
 
-  // Choose template
-  console.log(`\n${colors.bright}Choose your crew:${colors.reset}\n`);
-  Object.entries(crewTemplates).forEach(([id, t], i) => {
-    console.log(`  ${colors.cyan}${i + 1}.${colors.reset} ${t.name}`);
-    console.log(`     ${colors.dim}${t.description}${colors.reset}`);
+  console.log(`\n${c.bright}Choose your crew:${c.reset}\n`);
+  const templateIds = Object.keys(crewTemplates);
+  templateIds.forEach((id, i) => {
+    const t = crewTemplates[id];
+    console.log(`  ${c.cyan}${i + 1}.${c.reset} ${t.name}`);
+    console.log(`     ${c.dim}${t.description}${c.reset}`);
     console.log(`     ${t.agents.map(a => a.emoji).join(' ')}`);
     console.log('');
   });
 
-  const choice = await prompt(`${colors.cyan}Enter choice (1-${Object.keys(crewTemplates).length}): ${colors.reset}`);
-  const templateIds = Object.keys(crewTemplates);
+  const choice = await prompt(`${c.cyan}Enter choice (1-${templateIds.length}) [1]: ${c.reset}`);
   const templateId = templateIds[parseInt(choice) - 1] || 'xmen';
   const template = crewTemplates[templateId];
 
   log.success(`Selected: ${template.name}`);
 
-  // API Key
   console.log('');
-  const apiKey = await prompt(`${colors.cyan}Anthropic API Key (or press Enter to skip): ${colors.reset}`);
+  const apiKey = await prompt(`${c.cyan}Anthropic API Key (Enter to skip): ${c.reset}`);
 
-  // Save config
   const config = {
     template: templateId,
     apiKey: apiKey || null,
@@ -171,7 +197,6 @@ ${colors.reset}
   };
   saveConfig(config);
 
-  // Save crew
   const crew = {
     id: templateId,
     name: template.name,
@@ -183,8 +208,8 @@ ${colors.reset}
 
   console.log('');
   log.success('ClawCrew initialized!');
-  log.info(`Config saved to: ${CONFIG_PATH}`);
-  log.info(`Crew saved to: ${CREW_PATH}`);
+  log.info(`Config: ${CONFIG_PATH}`);
+  log.info(`Crew: ${CREW_PATH}`);
   console.log('');
   log.gambit("Your crew is ready, cher. Run 'clawcrew status' to see them.");
 }
@@ -197,71 +222,137 @@ function status() {
   }
 
   console.log(`
-${colors.bright}${colors.magenta}🃏 ClawCrew Status${colors.reset}
-${colors.dim}────────────────────${colors.reset}
+${c.bright}${c.magenta}🃏 ClawCrew Status${c.reset}
+${c.dim}────────────────────${c.reset}
 
-${colors.bright}Crew:${colors.reset} ${crew.name}
-${colors.bright}Created:${colors.reset} ${new Date(crew.createdAt).toLocaleDateString()}
+${c.bright}Crew:${c.reset} ${crew.name}
+${c.bright}Created:${c.reset} ${new Date(crew.createdAt).toLocaleDateString()}
 
-${colors.bright}Agents:${colors.reset}
+${c.bright}Agents:${c.reset}
 `);
 
   crew.agents.forEach((agent) => {
     const isCoord = agent.id === crew.coordinatorId;
-    console.log(`  ${agent.emoji} ${colors.bright}${agent.name}${colors.reset}${isCoord ? ` ${colors.yellow}(coordinator)${colors.reset}` : ''}`);
-    console.log(`     ${colors.dim}Role: ${agent.role}${colors.reset}`);
+    console.log(`  ${agent.emoji} ${c.bright}${agent.name}${c.reset}${isCoord ? ` ${c.yellow}(coordinator)${c.reset}` : ''}`);
+    console.log(`     ${c.dim}Role: ${agent.role}${c.reset}`);
   });
 
   console.log('');
 }
 
 function dashboard() {
-  const missionControlPath = path.join(__dirname, '..', 'skills', 'mission-control');
+  // Try multiple locations
+  const locations = [
+    path.join(__dirname, '..', 'skills', 'mission-control'),
+    path.join(process.env.HOME, '.openclaw', 'clawcrew', 'skills', 'mission-control'),
+    path.join(process.env.HOME, 'clawd', 'clawcrew', 'skills', 'mission-control'),
+  ];
   
-  if (!fs.existsSync(missionControlPath)) {
-    log.error('Mission Control not found. Installing...');
+  let missionControlPath = null;
+  for (const loc of locations) {
+    if (fs.existsSync(path.join(loc, 'package.json'))) {
+      missionControlPath = loc;
+      break;
+    }
+  }
+  
+  if (!missionControlPath) {
+    log.error('Mission Control not found. Run install.sh first.');
     return;
   }
 
-  log.info('Starting Mission Control dashboard...');
-  
-  try {
-    const child = spawn('npm', ['run', 'dev'], {
-      cwd: missionControlPath,
-      stdio: 'inherit',
-    });
-
-    child.on('error', (err) => {
-      log.error(`Failed to start: ${err.message}`);
-    });
-
-    setTimeout(() => {
-      log.success('Dashboard running at http://localhost:3333');
-    }, 2000);
-  } catch (err) {
-    log.error(`Error: ${err.message}`);
+  // Check if node_modules exists
+  if (!fs.existsSync(path.join(missionControlPath, 'node_modules'))) {
+    log.info('Installing Mission Control dependencies...');
+    const { execSync } = require('child_process');
+    try {
+      execSync('npm install', { cwd: missionControlPath, stdio: 'inherit' });
+    } catch (e) {
+      log.error('Failed to install dependencies');
+      return;
+    }
   }
+
+  log.info('Starting Mission Control...');
+  
+  const child = spawn('npm', ['run', 'dev'], {
+    cwd: missionControlPath,
+    stdio: 'inherit',
+  });
+
+  child.on('error', (err) => {
+    log.error(`Failed to start: ${err.message}`);
+  });
+}
+
+function run() {
+  const crew = loadCrew();
+  if (!crew) {
+    log.error("No crew found. Run 'clawcrew init' first.");
+    return;
+  }
+
+  log.gambit(`Starting ${crew.name}...`);
+  
+  // Check if openclaw is available
+  const { execSync } = require('child_process');
+  try {
+    execSync('which openclaw', { stdio: 'pipe' });
+  } catch {
+    log.error('OpenClaw not found. Install it from https://openclaw.ai');
+    return;
+  }
+
+  log.info('Launching OpenClaw with your crew...');
+  
+  const child = spawn('openclaw', [], {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      CLAWCREW_ACTIVE: '1',
+      CLAWCREW_TEMPLATE: crew.id,
+    },
+  });
+
+  child.on('error', (err) => {
+    log.error(`Failed to start: ${err.message}`);
+  });
+}
+
+function list() {
+  console.log(`\n${c.bright}Available Crew Templates:${c.reset}\n`);
+  
+  Object.entries(crewTemplates).forEach(([id, t]) => {
+    console.log(`  ${c.cyan}${id}${c.reset}`);
+    console.log(`  ${t.name}`);
+    console.log(`  ${c.dim}${t.description}${c.reset}`);
+    console.log(`  ${t.agents.map(a => `${a.emoji} ${a.name}`).join(', ')}`);
+    console.log('');
+  });
 }
 
 function help() {
   console.log(`
-${colors.bright}${colors.magenta}🃏 ClawCrew${colors.reset} - OpenClaw with personality
+${c.bright}${c.magenta}🃏 ClawCrew${c.reset} - OpenClaw with personality
 
-${colors.bright}Usage:${colors.reset}
+${c.bright}Usage:${c.reset}
   clawcrew <command>
 
-${colors.bright}Commands:${colors.reset}
+${c.bright}Commands:${c.reset}
   init        Initialize a new crew (interactive wizard)
   status      Show your crew's status
+  list        List available crew templates
   dashboard   Open Mission Control dashboard
-  help        Show this help message
+  run         Start OpenClaw with your crew
+  help        Show this help
 
-${colors.bright}Examples:${colors.reset}
+${c.bright}Examples:${c.reset}
   clawcrew init          # Set up your crew
   clawcrew status        # See your agents
   clawcrew dashboard     # Open Mission Control
+  clawcrew run           # Start OpenClaw
 
-${colors.dim}Laissez les bons temps rouler. 🃏${colors.reset}
+${c.dim}Laissez les bons temps rouler. 🃏${c.reset}
 `);
 }
 
@@ -271,13 +362,19 @@ const command = process.argv[2];
 
 switch (command) {
   case 'init':
-    init();
+    init().catch(console.error);
     break;
   case 'status':
     status();
     break;
+  case 'list':
+    list();
+    break;
   case 'dashboard':
     dashboard();
+    break;
+  case 'run':
+    run();
     break;
   case 'help':
   case '--help':
